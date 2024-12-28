@@ -26,6 +26,33 @@ public class MathController {
     	}
         return convertToDouble(numberOne) + convertToDouble(numberTwo);
     }
+    
+    @RequestMapping(value = "/api/subtraction/{numberOne}/{numberTwo}", method= RequestMethod.GET) 
+    public Double subtraction(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
+    	
+    	if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+    		throw new UnsupportedMathOperationException("Please set a numeric value");
+    	}
+    	return convertToDouble(numberOne) - convertToDouble(numberTwo);
+    }
+    
+    @RequestMapping(value = "/api/multiplication/{numberOne}/{numberTwo}", method= RequestMethod.GET) 
+    public Double multiplication(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
+    	
+    	if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+    		throw new UnsupportedMathOperationException("Please set a numeric value");
+    	}
+    	return convertToDouble(numberOne) * convertToDouble(numberTwo);
+    }    
+    
+    @RequestMapping(value = "/api/division/{numberOne}/{numberTwo}", method= RequestMethod.GET) 
+    public Double division(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
+    	
+    	if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+    		throw new UnsupportedMathOperationException("Please set a numeric value");
+    	}
+    	return convertToDouble(numberOne) / convertToDouble(numberTwo);
+    }
 	
 	private Double convertToDouble(String strNumber) {
 		if(strNumber == null) return 0D;
