@@ -2,16 +2,20 @@ package br.com.romario.api_gateway.controllers;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.romario.api_gateway.exceptions.UnsupportedMathOperationException;
+import br.com.romario.api_gateway.services.MathService;
 
 @RestController
 public class MathController {
-
+	
+	@Autowired
+	private MathService mathService;
+	
     private static final String template = "Hello, %s!";
     private static final AtomicLong count = new AtomicLong();
     
@@ -19,52 +23,22 @@ public class MathController {
     //@RequestParam : Query Parameters é usado quando o parametro não são obrigatório -> localhost:8080/api/greeting?name=romario
     
     @RequestMapping(value = "/api/sum/{numberOne}/{numberTwo}", method= RequestMethod.GET) 
-    public Double sum(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
-    	
-    	if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-    		throw new UnsupportedMathOperationException("Please set a numeric value");
-    	}
-        return convertToDouble(numberOne) + convertToDouble(numberTwo);
+    public Double sum(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) {
+    	return mathService.sum(numberOne, numberTwo);
     }
     
     @RequestMapping(value = "/api/subtraction/{numberOne}/{numberTwo}", method= RequestMethod.GET) 
-    public Double subtraction(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
-    	
-    	if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-    		throw new UnsupportedMathOperationException("Please set a numeric value");
-    	}
-    	return convertToDouble(numberOne) - convertToDouble(numberTwo);
+    public Double subtraction(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) {
+    	return mathService.subtraction(numberOne, numberTwo);
     }
     
     @RequestMapping(value = "/api/multiplication/{numberOne}/{numberTwo}", method= RequestMethod.GET) 
-    public Double multiplication(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
-    	
-    	if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-    		throw new UnsupportedMathOperationException("Please set a numeric value");
-    	}
-    	return convertToDouble(numberOne) * convertToDouble(numberTwo);
+    public Double multiplication(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) {
+    	return mathService.multiplication(numberOne, numberTwo);
     }    
     
     @RequestMapping(value = "/api/division/{numberOne}/{numberTwo}", method= RequestMethod.GET) 
-    public Double division(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
-    	
-    	if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-    		throw new UnsupportedMathOperationException("Please set a numeric value");
-    	}
-    	return convertToDouble(numberOne) / convertToDouble(numberTwo);
+    public Double division(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) {
+    	return mathService.division(numberOne, numberTwo);
     }
-	
-	private Double convertToDouble(String strNumber) {
-		if(strNumber == null) return 0D;
-		// BR 10,25 US 10.25
-		String number = strNumber.replaceAll(",", ".");
-		if(isNumeric(number)) return Double.parseDouble(number);
-		return 0D;
-	}
-	
-	private boolean isNumeric(String strNumber) {		
-		if(strNumber == null) return false;
-		String number = strNumber.replaceAll(",", ".");
-		return number.matches("[-+]?[0-9]*\\.?[0-9]+");
-	}
 }
