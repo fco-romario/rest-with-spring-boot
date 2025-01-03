@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,8 +46,8 @@ public class PersonController {
     @PostMapping(
     		produces = MediaType.APPLICATION_JSON_VALUE,
     		consumes = MediaType.APPLICATION_JSON_VALUE) 
-    public Person create(@RequestBody Person person) {
-    	return personService.create(person);
+    public ResponseEntity<Person> create(@RequestBody Person person) {
+    	return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(person));
     }
     
     @PutMapping(
@@ -56,7 +58,8 @@ public class PersonController {
     }
     
     @DeleteMapping(value = "{id}")
-    public void delete(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable(value = "id") Long id) {
     	personService.delete(id);
+    	return ResponseEntity.noContent().build();
     }
 }

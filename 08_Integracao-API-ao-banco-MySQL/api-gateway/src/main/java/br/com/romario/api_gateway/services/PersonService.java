@@ -21,7 +21,11 @@ public class PersonService {
 	public List<Person> findAll() {
 		logger.info("Finding all people");	
 		
-		return personRepository.findAll();
+		List<Person> people = personRepository.findAll();
+		
+		if(people.isEmpty()) throw new ResourceNotFoundException("No records found");
+		
+		return people;
 	}
 
 	public Person findById(Long id) {
