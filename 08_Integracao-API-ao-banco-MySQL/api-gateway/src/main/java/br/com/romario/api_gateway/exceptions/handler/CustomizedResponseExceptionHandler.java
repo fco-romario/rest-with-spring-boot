@@ -11,7 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.romario.api_gateway.exceptions.ExceptionsResponse;
-import br.com.romario.api_gateway.exceptions.UnsupportedMathOperationException;
+import br.com.romario.api_gateway.exceptions.ResourceNotFoundException;
 
 /*
 	Use @RestControllerAdvice quando você deseja uma maneira simples e prática de tratar exceções em APIs REST, com respostas automaticamente serializadas em JSON.
@@ -33,14 +33,14 @@ public class CustomizedResponseExceptionHandler extends ResponseEntityExceptionH
 		return new ResponseEntity<>(exceptionsResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ExceptionHandler(UnsupportedMathOperationException.class)
-	public final ResponseEntity<ExceptionsResponse> handleBadRequestException (
-			UnsupportedMathOperationException ex, WebRequest request) {
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public final ResponseEntity<ExceptionsResponse> handleNotFoundExceptions (
+			ResourceNotFoundException ex, WebRequest request) {
 		ExceptionsResponse exceptionsResponse = new ExceptionsResponse(
 				new Date(),
 				ex.getMessage(),
 				request.getDescription(false));
 		
-		return new ResponseEntity<>(exceptionsResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(exceptionsResponse, HttpStatus.NOT_FOUND);
 	}
 }
