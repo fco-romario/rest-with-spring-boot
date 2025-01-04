@@ -8,7 +8,7 @@ spring:
     open-in-view: false 
     hibernate:
       ddl-auto: update #Em caso de produção "none" é a melhor opção
-    properties:
+    #properties:
       #hibernate:
         #dialect: org.hibernate.dialect.MySQLDialect
       show-sql: false #Mostra o sql no terminal. Usar quando for debugar para não consumir recurso da máquina em momentos desnecessários

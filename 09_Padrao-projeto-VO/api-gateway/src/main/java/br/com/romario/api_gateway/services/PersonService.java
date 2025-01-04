@@ -6,7 +6,9 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.romario.api_gateway.data.vo.v1.PersonVO;
 import br.com.romario.api_gateway.exceptions.ResourceNotFoundException;
+import br.com.romario.api_gateway.mappers.Mapper;
 import br.com.romario.api_gateway.models.Person;
 import br.com.romario.api_gateway.repositories.PersonRepository;
 
@@ -18,45 +20,49 @@ public class PersonService {
 	@Autowired
 	private PersonRepository personRepository;
 	
-	public List<Person> findAll() {
+	public List<PersonVO> findAll() {
 		logger.info("Finding all people");	
 		
-		List<Person> people = personRepository.findAll();
+		List<PersonVO> people = Mapper.parseListObjects(personRepository.findAll(), PersonVO.class);
 		
 		if(people.isEmpty()) throw new ResourceNotFoundException("No records found");
-		
 		return people;
 	}
 
-	public Person findById(Long id) {
+	public PersonVO findById(Long id) {
 		logger.info("Finding one person");	
 		
-		return personRepository.findById(id)
+		var entity =  personRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID " + id));
+		return Mapper.parseObject(entity, PersonVO.class);
 	}
 	
-	public Person create(Person person) {
+	public PersonVO create(PersonVO person) {
 		logger.info("Creating one person");
-		return personRepository.save(person);
+		
+		var entity = Mapper.parseObject(person, Person.class);
+		var vo = Mapper.parseObject(personRepository.save(entity), PersonVO.class);	
+		return vo;
 	}
 	
-	public Person update(Person person) {
+	public PersonVO update(PersonVO person) {
 		logger.info("Updating one person");
 		
-		var entity = findById(person.getId());
+		var entity = Mapper.parseObject(findById(person.getId()),  Person.class);
 		
 		entity.setFirstName(person.getFirstName());
 		entity.setLastName(person.getLastName());
 		entity.setAddress(person.getAddress());
 		entity.setGender(person.getGender());
 		
-		return personRepository.save(person);
+		var vo = Mapper.parseObject(personRepository.save(entity), PersonVO.class);
+		return vo;
 	}
 	
 	public void delete(Long id) {
 		logger.info("Deleting one person");
 		
-		var entity = findById(id);
+		var entity = Mapper.parseObject(findById(id),  Person.class);
 		personRepository.delete(entity);
 	}
 }
