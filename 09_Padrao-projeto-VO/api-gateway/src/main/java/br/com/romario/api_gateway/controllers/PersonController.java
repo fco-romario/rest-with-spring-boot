@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.romario.api_gateway.models.Person;
+import br.com.romario.api_gateway.data.vo.v1.PersonVO;
 import br.com.romario.api_gateway.services.PersonService;
 
 @RestController
@@ -32,27 +32,27 @@ public class PersonController {
     //@RequestParam : Query Parameters é usado quando o parametro não são obrigatório -> localhost:8080/api/greeting?name=romario
     
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE) 
-    public List<Person> findAll() {
+    public List<PersonVO> findAll() {
     	return personService.findAll();
     }
     
     @GetMapping(value = "/{id}",
     		produces = MediaType.APPLICATION_JSON_VALUE) 
-    public Person findById(@PathVariable(value = "id") Long id) {
+    public PersonVO findById(@PathVariable(value = "id") Long id) {
     	return personService.findById(id);
     }
     
     @PostMapping(
     		produces = MediaType.APPLICATION_JSON_VALUE,
     		consumes = MediaType.APPLICATION_JSON_VALUE) 
-    public ResponseEntity<Person> create(@RequestBody Person person) {
+    public ResponseEntity<PersonVO> create(@RequestBody PersonVO person) {
     	return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(person));
     }
     
     @PutMapping(
     		produces = MediaType.APPLICATION_JSON_VALUE,
     		consumes = MediaType.APPLICATION_JSON_VALUE) 
-    public Person Update(@RequestBody Person person) {
+    public PersonVO Update(@RequestBody PersonVO person) {
     	return personService.update(person);
     }
     
