@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/rest_with_spring_boot?useTimezone=true&serverTimezone=UTC
+    username: root
+    password: admin123
+  jpa:
+    open-in-view: false 
+    hibernate:
+      ddl-auto: update #Em caso de produção "none" é a melhor opção
+    #properties:
+      #hibernate:
+        #dialect: org.hibernate.dialect.MySQLDialect
+      show-sql: false #Mostra o sql no terminal. Usar quando for debugar para não consumir recurso da máquina em momentos desnecessários
