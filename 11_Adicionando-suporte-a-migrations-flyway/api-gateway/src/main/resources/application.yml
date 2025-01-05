@@ -7,7 +7,7 @@ spring:
   jpa:
     open-in-view: false 
     hibernate:
-      ddl-auto: update #Em caso de produção "none" é a melhor opção
+      ddl-auto: none #O none nao deixa o hibernate(jpa) fazer alterações levando em consideração a entidade já que queremos fazer via migration.
     #properties:
       #hibernate:
         #dialect: org.hibernate.dialect.MySQLDialect
