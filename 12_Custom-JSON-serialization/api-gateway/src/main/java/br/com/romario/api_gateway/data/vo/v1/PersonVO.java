@@ -2,19 +2,28 @@ package br.com.romario.api_gateway.data.vo.v1;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+@JsonPropertyOrder({"id", "address", "firstName", "lastName", "gender"}) //define a ordem do JSON que será serializada
 public class PersonVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	
+	@JsonProperty("first_name")//define qual será o nome exibido da propriedade
 	private String firstName;
 	private String lastName;
 	private String address;
+	
+	@JsonIgnore //Não sera serializado
 	private String gender;
 	
 	public PersonVO() {}
