@@ -31,27 +31,27 @@ public class PersonController {
     //@PathVariable : Path Parameters é usado quando o parametro é obrigatório. é necesário inserir o "value" -> http://localhost:8080/api/sum/1/2
     //@RequestParam : Query Parameters é usado quando o parametro não são obrigatório -> localhost:8080/api/greeting?name=romario
     
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE) 
+    @GetMapping(produces =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) 
     public List<PersonVO> findAll() {
     	return personService.findAll();
     }
     
     @GetMapping(value = "/{id}",
-    		produces = MediaType.APPLICATION_JSON_VALUE) 
+    		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) 
     public PersonVO findById(@PathVariable(value = "id") Long id) {
     	return personService.findById(id);
     }
     
     @PostMapping(
-    		produces = MediaType.APPLICATION_JSON_VALUE,
-    		consumes = MediaType.APPLICATION_JSON_VALUE) 
+    		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+    		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) 
     public ResponseEntity<PersonVO> create(@RequestBody PersonVO person) {
     	return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(person));
     }
     
     @PutMapping(
-    		produces = MediaType.APPLICATION_JSON_VALUE,
-    		consumes = MediaType.APPLICATION_JSON_VALUE) 
+    		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+    		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }) 
     public PersonVO Update(@RequestBody PersonVO person) {
     	return personService.update(person);
     }
