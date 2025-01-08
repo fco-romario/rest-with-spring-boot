@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.stereotype.Service;
 
+import br.com.romario.api_gateway.controllers.PersonController;
 import br.com.romario.api_gateway.data.vo.v1.PersonVO;
 import br.com.romario.api_gateway.exceptions.ResourceNotFoundException;
 import br.com.romario.api_gateway.mappers.Mapper;
@@ -26,6 +29,10 @@ public class PersonService {
 		List<PersonVO> people = Mapper.parseListObjects(personRepository.findAll(), PersonVO.class);
 		
 		if(people.isEmpty()) throw new ResourceNotFoundException("No records found");
+		
+		people
+			.stream()
+			.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
 		return people;
 	}
 
@@ -34,7 +41,10 @@ public class PersonService {
 		
 		var entity =  personRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID " + id));
-		return Mapper.parseObject(entity, PersonVO.class);
+		
+		PersonVO vo = Mapper.parseObject(entity, PersonVO.class);
+		vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+		return vo;
 	}
 	
 	public PersonVO create(PersonVO person) {
@@ -42,13 +52,15 @@ public class PersonService {
 		
 		var entity = Mapper.parseObject(person, Person.class);
 		var vo = Mapper.parseObject(personRepository.save(entity), PersonVO.class);	
+		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
 		return vo;
 	}
 	
 	public PersonVO update(PersonVO person) {
 		logger.info("Updating one person");
 		
-		var entity = Mapper.parseObject(findById(person.getId()),  Person.class);
+		var entity = personRepository.findById(person.getKey())
+				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID " + person.getKey()));
 		
 		entity.setFirstName(person.getFirstName());
 		entity.setLastName(person.getLastName());
@@ -56,6 +68,7 @@ public class PersonService {
 		entity.setGender(person.getGender());
 		
 		var vo = Mapper.parseObject(personRepository.save(entity), PersonVO.class);
+		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
 		return vo;
 	}
 	
