@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.romario.api_gateway.controllers.PersonController;
 import br.com.romario.api_gateway.data.vo.v1.PersonVO;
+import br.com.romario.api_gateway.exceptions.RequiredObjectIsNullException;
 import br.com.romario.api_gateway.exceptions.ResourceNotFoundException;
 import br.com.romario.api_gateway.mappers.Mapper;
 import br.com.romario.api_gateway.models.Person;
@@ -48,8 +49,10 @@ public class PersonService {
 	}
 	
 	public PersonVO create(PersonVO person) {
-		logger.info("Creating one person");
 		
+		if(person == null) throw new RequiredObjectIsNullException();
+		
+		logger.info("Creating one person");
 		var entity = Mapper.parseObject(person, Person.class);
 		var vo = Mapper.parseObject(personRepository.save(entity), PersonVO.class);	
 		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
@@ -57,8 +60,10 @@ public class PersonService {
 	}
 	
 	public PersonVO update(PersonVO person) {
-		logger.info("Updating one person");
 		
+		if(person == null) throw new RequiredObjectIsNullException();
+		
+		logger.info("Updating one person");		
 		var entity = personRepository.findById(person.getKey())
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID " + person.getKey()));
 		

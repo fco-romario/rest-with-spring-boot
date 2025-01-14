@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.romario.api_gateway.exceptions.ExceptionsResponse;
+import br.com.romario.api_gateway.exceptions.RequiredObjectIsNullException;
 import br.com.romario.api_gateway.exceptions.ResourceNotFoundException;
 
 /*
@@ -42,5 +43,16 @@ public class CustomizedResponseExceptionHandler extends ResponseEntityExceptionH
 				request.getDescription(false));
 		
 		return new ResponseEntity<>(exceptionsResponse, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(RequiredObjectIsNullException.class)
+	public final ResponseEntity<ExceptionsResponse> handleBadRequestException (
+			RequiredObjectIsNullException ex, WebRequest request) {
+		ExceptionsResponse exceptionsResponse = new ExceptionsResponse(
+				new Date(),
+				ex.getMessage(),
+				request.getDescription(false));
+		
+		return new ResponseEntity<>(exceptionsResponse, HttpStatus.BAD_REQUEST);
 	}
 }

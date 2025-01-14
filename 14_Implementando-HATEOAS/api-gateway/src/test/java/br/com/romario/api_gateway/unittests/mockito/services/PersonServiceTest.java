@@ -2,6 +2,7 @@ package br.com.romario.api_gateway.unittests.mockito.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
@@ -19,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.romario.api_gateway.data.vo.v1.PersonVO;
+import br.com.romario.api_gateway.exceptions.RequiredObjectIsNullException;
 import br.com.romario.api_gateway.models.Person;
 import br.com.romario.api_gateway.repositories.PersonRepository;
 import br.com.romario.api_gateway.services.PersonService;
@@ -92,6 +94,18 @@ class PersonServiceTest {
 		assertEquals("Female", result.getGender());
 		
 	}
+	
+	@Test
+	void testCreateWithNullPerson() {
+		Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+			service.create(null);
+		});
+		
+		String expectedMessage = "It is not allowed to persist a null object!";
+		String actualMessage = exception.getMessage();
+		
+		assertTrue(actualMessage.contains(expectedMessage));
+	}
 
 	@Test
 	void testUpdate() {
@@ -119,7 +133,19 @@ class PersonServiceTest {
 		assertEquals("Last Name Test1", result.getLastName());
 		assertEquals("Female", result.getGender());	
 	}
-
+	
+	@Test
+	void testUpdateWithNullPerson() {
+		Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+			service.update(null);
+		});
+		
+		String expectedMessage = "It is not allowed to persist a null object!";
+		String actualMessage = exception.getMessage();
+		
+		assertTrue(actualMessage.contains(expectedMessage));
+	}
+	
 	@Test
 	void testDelete() {
 		Person entity = input.mockEntity(1);
