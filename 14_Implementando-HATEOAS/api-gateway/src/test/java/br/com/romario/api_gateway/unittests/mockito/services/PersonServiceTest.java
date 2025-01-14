@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -114,16 +115,13 @@ class PersonServiceTest {
 
 	@Test
 	void testCreate() {
-		Person entity = input.mockEntity(1);// o que será "salvo"
-		entity.setId(1L);
-		
-		Person persisted = entity;// o que será retornado apos "salvar"
+		Person persisted = input.mockEntity(1);
 		persisted.setId(1L);
 		
 		PersonVO vo = input.mockVO(1);
 		vo.setKey(1L);
 		
-		when(repository.save(entity)).thenReturn(persisted);
+		when(repository.save(any(Person.class))).thenReturn(persisted);
 		
 		var result = service.create(vo);
 		

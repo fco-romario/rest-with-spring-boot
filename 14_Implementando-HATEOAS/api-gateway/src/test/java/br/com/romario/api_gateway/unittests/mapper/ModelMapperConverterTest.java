@@ -12,7 +12,7 @@ import br.com.romario.api_gateway.mappers.Mapper;
 import br.com.romario.api_gateway.models.Person;
 import br.com.romario.api_gateway.unittests.mapper.mocks.MockPerson;
 
-public class DozerConverterTest {
+public class ModelMapperConverterTest {
     
     MockPerson inputObject;
 
