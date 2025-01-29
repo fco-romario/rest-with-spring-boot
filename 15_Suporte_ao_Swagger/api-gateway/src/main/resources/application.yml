@@ -11,4 +11,12 @@ spring:
     #properties:
       #hibernate:
         #dialect: org.hibernate.dialect.MySQLDialect
-      show-sql: false #Mostra o sql no terminal. Usar quando for debugar para não consumir recurso da máquina em momentos desnecessários
+    show-sql: false #Mostra o sql no terminal. Usar quando for debugar para não consumir recurso da máquina em momentos desnecessários
+springdoc:
+  pathsToMatch: /api/**/v1**   #A configuração pathsToMatch especifica quais rotas (ou caminhos) da sua API devem ser incluídas na documentação gerada pelo Springdoc.
+  swagger-ui:
+    use-root-path: true
+    #A configuração use-root-path determina onde o Swagger UI será acessado na sua aplicação. Quando configurado como true,
+    #o Swagger UI será exposto na raiz da aplicação, ou seja, na URL principal, como:
+    #http://localhost:8080/
+    #Caso contrário, o Swagger UI será acessado em um caminho específico como /swagger-ui/index.html.
